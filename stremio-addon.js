@@ -33,7 +33,7 @@ app.get('/manifest.json', (req, res) => {
         version: '1.0.0',
         name: 'Bort Max',
         description: 'Direct streams from a.111477.xyz directory',
-        logo: 'https://ibb.co/Zz1cV0Zm',
+        logo: 'https://i.imgur.com/qmJshyP.png',
         resources: ['catalog', 'stream'],
         types: ['movie', 'series'],
         catalogs: [
