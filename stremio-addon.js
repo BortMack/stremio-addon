@@ -3,6 +3,7 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 
 const BASE_URL = 'https://a.111477.xyz';
+const app = express();
 
 // CORS headers
 app.use((req, res, next) => {
