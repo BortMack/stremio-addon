@@ -8,6 +8,7 @@ const app = express();
 
 // Manifest - required by Stremio
 app.get('/manifest.json', (req, res) => {
+    console.log('Manifest requested');
     res.json({
         id: 'com.111477.directory',
         version: '1.0.0',
@@ -33,55 +34,8 @@ app.get('/manifest.json', (req, res) => {
 // Catalog endpoint
 app.get('/catalog/:type/:id.json', async (req, res) => {
     try {
-        const { type } = req.params;
-        let items = [];
-
-        if (type === 'movie') {
-            const html = await axios.get(`${BASE_URL}/movies/`);
-            const $ = cheerio.load(html.data);
-
-            items = $('tr').map((i, row) => {
-                const link = $(row).find('a');
-                const href = link.attr('href');
-                const name = link.text().trim();
-
-                if (!href || !name || name === '../' || !href.endsWith('/')) 
-                    return null;
-
-                const title = name.replace(/^[^a-zA-Z0-9]+/, '');
-
-                return {
-                    id: `movie:${href.replace(/\//g, '')}`,
-                    type: 'movie',
-                    name: title,
-                    poster: 'https://via.placeholder.com/300x450?text=' + encodeURIComponent(title)
-                };
-            }).get().filter(Boolean);
-
-        } else if (type === 'series') {
-            const html = await axios.get(`${BASE_URL}/tvs/`);
-            const $ = cheerio.load(html.data);
-
-            items = $('tr').map((i, row) => {
-                const link = $(row).find('a');
-                const href = link.attr('href');
-                const name = link.text().trim();
-
-                if (!href || !name || name === '../' || !href.endsWith('/')) 
-                    return null;
-
-                const title = name.replace(/^[^a-zA-Z0-9]+/, '');
-
-                return {
-                    id: `series:${href.replace(/\//g, '')}`,
-                    type: 'series',
-                    name: title,
-                    poster: 'https://via.placeholder.com/300x450?text=' + encodeURIComponent(title)
-                };
-            }).get().filter(Boolean);
-        }
-
-        res.json({ metas: items.slice(0, 100) });
+        console.log(`Catalog requested: ${req.params.type} ${req.params.id}`);
+        res.json({ metas: [] });
     } catch (error) {
         console.error('Catalog error:', error);
         res.json({ metas: [] });
@@ -91,36 +45,8 @@ app.get('/catalog/:type/:id.json', async (req, res) => {
 // Stream endpoint
 app.get('/stream/:type/:id.json', async (req, res) => {
     try {
-        const { type, id } = req.params;
-        const [category, dirName] = id.split(':');
-        const streams = [];
-
-        let url = '';
-        if (category === 'movie') {
-            url = `${BASE_URL}/movies/${encodeURIComponent(dirName)}/`;
-        } else if (category === 'series') {
-            url = `${BASE_URL}/tvs/${encodeURIComponent(dirName)}/`;
-        }
-
-        const html = await axios.get(url);
-        const $ = cheerio.load(html.data);
-
-        $('tr a').each((i, elem) => {
-            const href = $(elem).attr('href');
-            const text = $(elem).text().trim();
-
-            if (href && !href.endsWith('/') && 
-                /\.(mkv|mp4|avi|mov|wmv|flv|webm|m4v)$/i.test(href)) {
-
-                streams.push({
-                    title: text + ' (Direct HTTP)',
-                    url: url + href,
-                    name: '111477 Direct'
-                });
-            }
-        });
-
-        res.json({ streams: streams });
+        console.log(`Stream requested: ${req.params.type} ${req.params.id}`);
+        res.json({ streams: [] });
     } catch (error) {
         console.error('Stream error:', error);
         res.json({ streams: [] });
@@ -130,7 +56,7 @@ app.get('/stream/:type/:id.json', async (req, res) => {
 // Start server
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
-    console.log(`Addon running at port ${PORT}`);
+    console.log(`Addon running on port ${PORT}`);
 });
 
 module.exports = app;
