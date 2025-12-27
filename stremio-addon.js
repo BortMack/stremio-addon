@@ -32,7 +32,7 @@ app.get('/manifest.json', (req, res) => {
         id: 'com.bortmax.directory',
         version: '1.0.0',
         name: 'Bort Max',
-        description: 'Direct streams from a.111477.xyz directory',
+        description: 'Direct streams from BORT KNOX VAULT',
         logo: 'https://i.imgur.com/qmJshyP.png',
         resources: ['catalog', 'stream'],
         types: ['movie', 'series'],
