@@ -128,10 +128,9 @@ app.get('/stream/:type/:id.json', async (req, res) => {
 });
 
 // Start server
-const PORT = process.env.PORT || 7000;
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
-    console.log(`Addon running at: http://localhost:${PORT}/manifest.json`);
-    console.log(`Add this URL to Stremio: http://localhost:${PORT}/manifest.json`);
+    console.log(`Addon running at port ${PORT}`);
 });
 
 module.exports = app;
