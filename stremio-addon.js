@@ -6,6 +6,18 @@ const BASE_URL = 'https://a.111477.xyz';
 
 const app = express();
 
+// CORS headers - required for Stremio
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    if (req.method === 'OPTIONS') {
+        res.sendStatus(200);
+    } else {
+        next();
+    }
+});
+
 // Manifest - required by Stremio
 app.get('/manifest.json', (req, res) => {
     console.log('Manifest requested');
