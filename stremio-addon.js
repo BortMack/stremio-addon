@@ -140,8 +140,14 @@ app.get('/meta/:type/:id.json', (req, res) => {
         const { type, id } = req.params;
         console.log(`Meta requested: ${type} ${id}`);
 
-        const [category, dirName] = id.split(':');
-        const name = dirName.replace(/\d{4}/, '').replace(/_/g, ' ').trim();
+        // Handle both formats: "bortmax-xxx" and standard IDs
+        let name = id;
+        if (id.includes(':')) {
+            const parts = id.split(':');
+            name = parts[1] ? parts[1].replace(/_/g, ' ').trim() : id;
+        } else {
+            name = id.replace(/^bortmax-/, '').replace(/_/g, ' ').trim();
+        }
 
         res.json({
             meta: {
